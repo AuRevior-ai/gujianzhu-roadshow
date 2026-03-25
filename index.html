@@ -3,366 +3,795 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>古建筑调研路演 | 木构、尺度与时间</title>
+  <title>古建筑调研 · HTML 路演</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
+    *{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --bg:#120e0b;
-      --paper:#efe4d1;
-      --paper-2:#e4d4bc;
-      --ink:#24170f;
-      --ink-2:#5f4835;
-      --gold:#b78b59;
-      --gold-2:#d5b486;
-      --line:rgba(120,87,59,.22);
-      --panel:rgba(255,248,238,.70);
-      --shadow:0 24px 80px rgba(0,0,0,.18);
+      --paper:#ece0d1;
+      --paper-2:#f4ecdf;
+      --ink:#221711;
+      --ink-soft:#6d5647;
+      --gold:#9b7449;
+      --red:#8b4338;
+      --green:#405247;
+      --line:rgba(64,41,28,.13);
+      --line-strong:rgba(64,41,28,.22);
+      --shadow:0 28px 80px rgba(46,28,17,.15);
+      --radius:24px;
+      --radius-lg:34px;
+      --title-size:clamp(2.2rem,5.8vw,5.5rem);
+      --h2-size:clamp(1.65rem,3vw,3rem);
+      --h3-size:clamp(1rem,1.5vw,1.28rem);
+      --body-size:clamp(.9rem,1.12vw,1.08rem);
+      --small-size:clamp(.7rem,.82vw,.86rem);
+      --pad:clamp(1rem,3.4vw,3rem);
+      --gap:clamp(.9rem,1.35vw,1.3rem);
+      --ease:cubic-bezier(.22,1,.36,1);
     }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
+    html,body{height:100%;overflow-x:hidden;background:#e4d5c6;color:var(--ink)}
+    html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
     body{
-      margin:0;
-      font-family:'Noto Sans SC',system-ui,sans-serif;
-      color:var(--ink);
+      font-family:"Noto Sans SC",sans-serif;
       background:
-        radial-gradient(circle at 20% 20%, rgba(183,139,89,.12), transparent 30%),
-        radial-gradient(circle at 80% 10%, rgba(255,255,255,.08), transparent 20%),
-        linear-gradient(180deg,#271d16 0%,#16110d 18%,#efe4d1 19%,#efe4d1 100%);
-      overflow-x:hidden;
+        radial-gradient(circle at 16% 18%, rgba(155,116,73,.15), transparent 26%),
+        radial-gradient(circle at 86% 12%, rgba(83,61,44,.09), transparent 24%),
+        linear-gradient(135deg,#d7c5b4 0%,#e7dacd 38%,#efe6db 100%);
+      position:relative;
     }
-    .grain::before{
+    body::before{
       content:"";
-      position:fixed; inset:0; pointer-events:none; z-index:0;
-      background-image:radial-gradient(rgba(0,0,0,.04) 1px, transparent 1px);
-      background-size:4px 4px; opacity:.12;
-    }
-    .progress{position:fixed; top:0; left:0; right:0; height:4px; z-index:50; background:rgba(255,255,255,.08)}
-    .progress > span{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--gold),var(--gold-2)); box-shadow:0 0 18px rgba(183,139,89,.45)}
-    .nav{
-      position:fixed; top:18px; right:18px; z-index:40;
-      display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;
-      max-width:min(88vw,720px);
-    }
-    .nav a{
-      color:#fff7ef; text-decoration:none; font-size:12px; letter-spacing:.08em;
-      padding:9px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.14);
-      background:rgba(26,19,14,.48); backdrop-filter:blur(10px);
-      transition:transform .2s ease, background .2s ease, border-color .2s ease;
-    }
-    .nav a:hover{transform:translateY(-2px); background:rgba(49,35,25,.72); border-color:rgba(213,180,134,.5)}
-    .hero{
-      min-height:100vh; position:relative; z-index:1; color:#fff4ea;
-      display:grid; place-items:center; padding:90px 24px 64px;
+      position:fixed;inset:0;pointer-events:none;z-index:-2;
       background:
-        linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.44)),
-        url('https://upload.wikimedia.org/wikipedia/commons/3/39/Wutai_2009_350.jpg') center/cover no-repeat;
+        linear-gradient(rgba(255,255,255,.22), rgba(255,255,255,.22)),
+        repeating-linear-gradient(0deg, rgba(128,101,78,.025) 0 1px, transparent 1px 5px),
+        repeating-linear-gradient(90deg, rgba(128,101,78,.018) 0 1px, transparent 1px 7px);
+      mix-blend-mode:multiply;
     }
-    .hero-card{
-      width:min(1100px,100%); padding:34px; border-radius:32px;
-      background:linear-gradient(180deg, rgba(27,20,15,.72), rgba(27,20,15,.55));
-      border:1px solid rgba(255,255,255,.15);
-      box-shadow:0 30px 100px rgba(0,0,0,.35);
-      backdrop-filter:blur(10px);
+    body::after{
+      content:"";
+      position:fixed;inset:0;pointer-events:none;z-index:-1;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(0,0,0,0), rgba(0,0,0,.08));
     }
-    .eyebrow{font-size:13px; text-transform:uppercase; letter-spacing:.2em; color:#e7c69b}
-    h1,h2,h3{font-family:'Noto Serif SC',serif; margin:0 0 .4em}
-    h1{font-size:clamp(2.4rem,6vw,5.6rem); line-height:1.02; max-width:9ch}
-    .hero p{max-width:60ch; line-height:1.9; color:rgba(255,244,234,.84); font-size:1.05rem}
-    .hero-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:22px; margin-top:24px}
-    .fact{
-      padding:18px 20px; border-radius:22px; background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10)
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
+
+    .progress{position:fixed;left:0;top:0;width:100%;height:4px;background:rgba(255,255,255,.35);z-index:40}
+    .progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--gold),#c89e66);box-shadow:0 0 18px rgba(155,116,73,.35);transition:width .3s ease}
+    .hud{position:fixed;top:1rem;left:1rem;right:1rem;z-index:35;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;gap:1rem}
+    .hud-pill,.hud-info{pointer-events:auto;background:rgba(255,249,243,.72);backdrop-filter:blur(14px);border:1px solid rgba(77,54,39,.11);box-shadow:0 12px 30px rgba(50,31,20,.08)}
+    .hud-pill{padding:.68rem .95rem;border-radius:999px;font-size:var(--small-size);letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
+    .hud-info{padding:.75rem .9rem;border-radius:18px;font-size:var(--small-size);color:var(--ink-soft);display:flex;gap:.8rem;align-items:center}
+    .nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:34;display:flex;flex-direction:column;gap:.58rem}
+    .nav button{width:14px;height:14px;border-radius:50%;border:none;background:rgba(87,59,40,.18);cursor:pointer;transition:transform .25s ease,background .25s ease,box-shadow .25s ease;position:relative}
+    .nav button.active{background:var(--gold);transform:scale(1.14);box-shadow:0 0 0 8px rgba(155,116,73,.13)}
+    .nav button::after{content:attr(data-label);position:absolute;right:calc(100% + 12px);top:50%;transform:translateY(-50%);background:rgba(28,21,17,.8);color:#f7efe6;padding:.3rem .55rem;border-radius:999px;font-size:12px;white-space:nowrap;opacity:0;transition:opacity .2s ease;pointer-events:none}
+    .nav button:hover::after{opacity:1}
+
+    .slide{height:100vh;height:100dvh;scroll-snap-align:start;position:relative;overflow:hidden;display:flex;align-items:stretch}
+    .slide::before{content:"";position:absolute;inset:12px;border-radius:30px;border:1px solid rgba(87,59,40,.09);pointer-events:none}
+    .slide-content{width:min(1240px,100%);margin:0 auto;padding:var(--pad);display:flex;flex-direction:column;justify-content:center;gap:var(--gap);position:relative;z-index:2}
+    .theme-hero{color:#f5ede5;background:
+      linear-gradient(120deg, rgba(16,11,9,.86), rgba(31,19,14,.72) 45%, rgba(34,20,16,.65)),
+      url('https://commons.wikimedia.org/wiki/Special:FilePath/Corner%20Tower%20of%20Forbidden%20City%20(20240627).jpg') center/cover no-repeat}
+    .theme-hero::before{border-color:rgba(255,246,236,.12)}
+    .theme-dark{color:#f5ede5;background:
+      radial-gradient(circle at 20% 18%, rgba(200,150,100,.14), transparent 24%),
+      linear-gradient(135deg,#291a14 0%,#3a241b 36%,#221713 100%)}
+    .theme-dark::before{border-color:rgba(255,246,236,.10)}
+    .theme-paper{background:linear-gradient(180deg, rgba(255,250,244,.82), rgba(240,230,217,.88));}
+    .theme-paper .eyebrow,.theme-paper .capsule{color:var(--gold)}
+    .theme-ink{background:linear-gradient(135deg,#403126 0%,#594233 38%,#34261e 100%);color:#f3eadf}
+    .theme-ink::before{border-color:rgba(255,246,236,.10)}
+
+    .eyebrow{display:inline-flex;align-items:center;gap:.65rem;font-size:var(--small-size);letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+    .eyebrow::before{content:"";display:block;width:42px;height:1px;background:currentColor;opacity:.65}
+    .hero-title,.section-title,.big-calligraphy{font-family:"Noto Serif SC","Cormorant Garamond",serif;line-height:.96;letter-spacing:-.035em}
+    .hero-title{font-size:var(--title-size);max-width:10ch}
+    .section-title{font-size:var(--h2-size);max-width:15ch}
+    .big-calligraphy{font-size:clamp(2.2rem,6vw,5.2rem)}
+    .calligraphy{font-family:"Ma Shan Zheng",cursive;font-size:clamp(1.45rem,2.5vw,2.35rem);color:color-mix(in srgb,var(--gold) 76%, white 8%)}
+    .lede,.body,.card p,.metric span,.note,.caption,.quote,.tiny{font-size:var(--body-size);line-height:1.72;color:var(--ink-soft);text-wrap:pretty}
+    .theme-dark .lede,.theme-dark .body,.theme-dark .note,.theme-dark .caption,.theme-dark .tiny,
+    .theme-ink .lede,.theme-ink .body,.theme-ink .note,.theme-ink .caption,.theme-ink .tiny{color:rgba(245,237,229,.76)}
+    .quote{font-family:"Noto Serif SC",serif;font-size:clamp(1rem,1.35vw,1.18rem);padding:.95rem 1.05rem;border-left:3px solid var(--gold);background:rgba(255,255,255,.06);border-radius:0 18px 18px 0}
+
+    .hero-grid,.two-col,.three-col,.four-col,.metric-row,.timeline,.method-grid,.delivery-grid,.credit-grid,.gallery-grid{display:grid;gap:var(--gap)}
+    .hero-grid,.two-col{grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr)}
+    .three-col{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .four-col{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .metric-row{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .timeline{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .gallery-grid{grid-template-columns:1.2fr .8fr}
+
+    .panel,.image-card,.card,.metric,.timeline-item,.method-card,.credit-card,.capsule-list,.notebook,.floating-stack,.sticky-frame{position:relative;border-radius:var(--radius);border:1px solid var(--line);background:rgba(255,250,245,.62);box-shadow:var(--shadow);overflow:hidden}
+    .theme-dark .panel,.theme-dark .image-card,.theme-dark .card,.theme-dark .metric,.theme-dark .timeline-item,.theme-dark .method-card,
+    .theme-ink .panel,.theme-ink .image-card,.theme-ink .card,.theme-ink .metric,.theme-ink .timeline-item,.theme-ink .method-card{
+      background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.11);box-shadow:0 25px 60px rgba(0,0,0,.25)
     }
-    .fact strong{display:block; font-size:1.4rem; color:#fffaf5; font-family:'Noto Serif SC',serif}
-    main{position:relative; z-index:1}
-    section.block{padding:84px 24px}
-    .wrap{width:min(1160px,100%); margin:0 auto}
-    .paper{
-      background:linear-gradient(180deg,var(--paper),#f7efe2);
-      border:1px solid var(--line); border-radius:32px; box-shadow:var(--shadow);
-      padding:30px;
+    .panel,.card,.metric,.timeline-item,.method-card,.credit-card,.notebook,.sticky-frame{padding:clamp(1rem,1.4vw,1.2rem)}
+    .image-card{padding:clamp(.7rem,1vw,.85rem)}
+    .image-card img{width:100%;height:min(55vh,420px);object-fit:cover;border-radius:calc(var(--radius) - 8px);transition:transform .8s var(--ease)}
+    .image-card:hover img{transform:scale(1.04)}
+    .image-card.small img{height:min(33vh,220px)}
+    .image-card.tall img{height:min(66vh,560px);object-position:center top}
+    .image-card .caption{margin-top:.65rem;font-size:var(--small-size)}
+    .source{margin-top:.35rem;font-size:12px;color:inherit;opacity:.82}
+    .source a{text-decoration:underline;text-underline-offset:.18em}
+
+    .capsule-row{display:flex;flex-wrap:wrap;gap:.55rem}
+    .capsule{display:inline-flex;align-items:center;gap:.35rem;padding:.48rem .78rem;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.55);font-size:var(--small-size);letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+    .theme-dark .capsule,.theme-ink .capsule{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.11);color:#e6c89a}
+    .metric strong{font-family:"Bodoni Moda",serif;font-size:clamp(1.35rem,2vw,2rem);line-height:1.02;display:block}
+    .metric span{font-size:var(--small-size);display:block;margin-top:.32rem}
+    .card h3,.timeline-item h3,.method-card h3,.credit-card h3,.tabs h3,.hotspot-card h3{font-size:var(--h3-size);line-height:1.2;margin-bottom:.35rem;font-family:"Noto Serif SC",serif}
+    .timeline-item{display:flex;flex-direction:column;gap:.4rem;min-height:190px}
+    .timeline-year{font-family:"Bodoni Moda",serif;font-size:clamp(1.4rem,2.2vw,2.1rem);color:var(--gold)}
+
+    .notebook{background:rgba(248,244,236,.86);color:var(--ink);padding:1.1rem 1.2rem 1.1rem 1.55rem}
+    .notebook::before{content:"";position:absolute;left:18px;top:20px;bottom:20px;width:2px;background:rgba(177,76,60,.2)}
+    .checklist{list-style:none;display:grid;gap:.6rem}
+    .checklist li{display:grid;grid-template-columns:auto 1fr;gap:.65rem;align-items:start;font-size:var(--body-size);line-height:1.55;color:var(--ink-soft)}
+    .checklist li::before{content:"✦";color:var(--red);transform:translateY(.14rem)}
+
+    .floater{position:absolute;border-radius:50%;filter:blur(0);opacity:.24;animation:float 12s ease-in-out infinite}
+    .floater.a{width:260px;height:260px;background:radial-gradient(circle,var(--gold),transparent 70%);top:-80px;right:-60px}
+    .floater.b{width:200px;height:200px;background:radial-gradient(circle,rgba(120,80,55,.75),transparent 68%);bottom:-60px;left:-40px;animation-delay:-6s}
+
+    .tab-shell{display:grid;gap:.9rem}
+    .tab-row{display:flex;flex-wrap:wrap;gap:.5rem}
+    .tab-btn{padding:.58rem .9rem;border:none;border-radius:999px;background:rgba(255,255,255,.55);border:1px solid var(--line);cursor:pointer;font:inherit;color:var(--ink-soft);transition:transform .2s ease, background .2s ease, color .2s ease}
+    .tab-btn.active{background:var(--gold);color:#fff8f0;transform:translateY(-1px)}
+    .theme-dark .tab-btn,.theme-ink .tab-btn{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:rgba(255,244,233,.74)}
+    .tab-panel{border-radius:var(--radius);border:1px solid var(--line);background:rgba(255,255,255,.52);padding:1rem;min-height:250px}
+    .theme-dark .tab-panel,.theme-ink .tab-panel{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.11)}
+    .tab-panel h3{margin-bottom:.5rem}
+    .tab-panel ul{padding-left:1rem;display:grid;gap:.5rem}
+    .tab-panel li{font-size:var(--body-size);line-height:1.6;color:var(--ink-soft)}
+    .theme-dark .tab-panel li,.theme-ink .tab-panel li{color:rgba(255,244,233,.76)}
+
+    .switch-card{display:grid;gap:.8rem}
+    .switch-view{display:none}
+    .switch-view.active{display:grid;gap:.8rem}
+
+    .stacked{position:relative;min-height:360px}
+    .stacked .layer{position:absolute;inset:auto 0 0 auto;width:min(360px,92%);padding:1rem;border-radius:26px;border:1px solid var(--line);background:rgba(255,255,255,.72);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+    .theme-dark .stacked .layer,.theme-ink .stacked .layer{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.1)}
+    .stacked .layer:nth-child(1){top:14px;left:16px;transform:rotate(-4deg)}
+    .stacked .layer:nth-child(2){top:98px;left:54px;transform:rotate(2deg)}
+    .stacked .layer:nth-child(3){top:182px;left:24px;transform:rotate(-1deg)}
+
+    .hotspot-stage{position:relative;overflow:hidden;border-radius:var(--radius-lg);border:1px solid var(--line);box-shadow:var(--shadow)}
+    .hotspot-stage img{width:100%;height:min(56vh,460px);object-fit:cover}
+    .hotspot{position:absolute;display:flex;align-items:center;gap:.55rem}
+    .hotspot-dot{width:12px;height:12px;border-radius:50%;background:#fff1dc;box-shadow:0 0 0 9px rgba(255,241,220,.13),0 0 18px rgba(241,196,125,.42);animation:pulse 2.8s ease-in-out infinite}
+    .hotspot-card{max-width:240px;padding:.65rem .8rem;border-radius:18px;background:rgba(28,18,13,.78);backdrop-filter:blur(10px);color:#f7efe4;border:1px solid rgba(255,255,255,.12);opacity:0;transform:translateY(8px);transition:.3s var(--ease)}
+    .hotspot:hover .hotspot-card{opacity:1;transform:translateY(0)}
+    .hotspot-card p{font-size:13px;line-height:1.5;color:rgba(247,239,228,.82)}
+
+    .delivery-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .delivery-card{padding:1rem;border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.55)}
+    .delivery-card h3{font-size:var(--h3-size);font-family:"Noto Serif SC",serif;margin-bottom:.4rem}
+    .delivery-card p{font-size:var(--small-size);line-height:1.55;color:var(--ink-soft)}
+
+    .credit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .credit-card ul{padding-left:1rem;display:grid;gap:.4rem}
+    .credit-card li{font-size:var(--small-size);line-height:1.55;color:var(--ink-soft)}
+    .theme-ink .credit-card li{color:rgba(247,239,228,.78)}
+
+    .reveal{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--delay,0s)}
+    .reveal-left{opacity:0;transform:translateX(-32px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--delay,0s)}
+    .reveal-scale{opacity:0;transform:scale(.94);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--delay,0s)}
+    .slide.visible .reveal,.slide.visible .reveal-left,.slide.visible .reveal-scale{opacity:1;transform:none}
+
+    .footline{display:flex;justify-content:space-between;gap:1rem;align-items:flex-end}
+    .page-no{font-family:"Bodoni Moda",serif;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;color:rgba(255,255,255,.14)}
+    .theme-paper .page-no{color:rgba(110,84,63,.16)}
+
+    @keyframes pulse{50%{transform:scale(1.15);opacity:.85}}
+    @keyframes float{50%{transform:translateY(18px) scale(1.04)}}
+
+    @media (max-width: 1120px){
+      .hero-grid,.two-col,.gallery-grid{grid-template-columns:1fr}
+      .three-col,.four-col,.timeline,.delivery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .credit-grid{grid-template-columns:1fr}
+      .metric-row{grid-template-columns:1fr 1fr 1fr}
+      .hero-grid > .image-card,.two-col > .image-card{order:-1}
     }
-    .section-top{display:flex; justify-content:space-between; align-items:end; gap:18px; margin-bottom:22px}
-    .section-top p{max-width:62ch; margin:0; line-height:1.8; color:var(--ink-2)}
-    .num{font-family:'Noto Serif SC',serif; font-size:clamp(2.2rem,6vw,5rem); color:rgba(93,68,47,.18); line-height:1}
-    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:22px}
-    .img-card img{width:100%; height:320px; object-fit:cover; border-radius:24px; display:block}
-    .img-note{font-size:.92rem; color:var(--ink-2); line-height:1.75; margin-top:10px}
-    .card{padding:22px; border-radius:24px; background:rgba(255,255,255,.42); border:1px solid rgba(120,87,59,.12)}
-    .card p, .card li{line-height:1.85; color:var(--ink-2)}
-    .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
-    .chip{padding:8px 12px; border-radius:999px; background:rgba(183,139,89,.11); border:1px solid rgba(183,139,89,.18); font-size:.9rem}
-    .timeline{display:grid; gap:14px}
-    .tl{display:grid; grid-template-columns:120px 1fr; gap:14px; padding:14px 0; border-bottom:1px dashed rgba(120,87,59,.2)}
-    .tl:last-child{border-bottom:none}
-    .tl strong{font-family:'Noto Serif SC',serif}
-    .metrics{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:18px}
-    .metric{padding:18px; border-radius:20px; background:#fff7ef; border:1px solid rgba(120,87,59,.12)}
-    .metric b{display:block; font-family:'Noto Serif SC',serif; font-size:1.45rem}
-    .sticky-note{padding:18px 20px; border-left:4px solid var(--gold); background:rgba(183,139,89,.08); border-radius:0 20px 20px 0; color:var(--ink-2); line-height:1.8}
-    .gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
-    .gallery figure{margin:0; padding:12px; border-radius:22px; background:rgba(255,255,255,.46); border:1px solid rgba(120,87,59,.12)}
-    .gallery img{width:100%; height:200px; object-fit:cover; border-radius:16px; display:block}
-    .gallery figcaption{margin-top:10px; color:var(--ink-2); font-size:.92rem; line-height:1.7}
-    .full-quote{
-      padding:56px 24px; text-align:center; color:#fff5ec;
-      background:linear-gradient(180deg,#241a13,#17110d);
+    @media (max-width: 760px){
+      .hud{flex-direction:column;align-items:flex-start}
+      .nav{display:none}
+      .three-col,.four-col,.timeline,.delivery-grid,.metric-row{grid-template-columns:1fr}
+      .slide::before{inset:8px}
+      .stacked{min-height:460px}
+      .hotspot-stage img{height:280px}
+      .hotspot-card{max-width:180px}
     }
-    .full-quote .wrap{width:min(920px,100%)}
-    .full-quote p{font-size:clamp(1.25rem,2.2vw,1.8rem); line-height:1.9; font-family:'Noto Serif SC',serif}
-    .method{display:grid; grid-template-columns:repeat(4,1fr); gap:16px}
-    .method .card{min-height:210px}
-    footer{padding:64px 24px 90px; background:#f5ead8}
-    footer .paper{background:linear-gradient(180deg,#f8f0e4,#f0e3cf)}
-    .sources a{color:#6a4a2f}
-    .fade{opacity:0; transform:translateY(24px); transition:opacity .8s ease, transform .8s ease}
-    .fade.show{opacity:1; transform:none}
-    @media (max-width:980px){
-      .hero-grid,.grid-2,.method{grid-template-columns:1fr}
-      .gallery{grid-template-columns:1fr 1fr}
-      .metrics{grid-template-columns:1fr 1fr}
-      .tl{grid-template-columns:1fr}
-      .nav{left:18px; right:18px; justify-content:flex-start}
-    }
-    @media (max-width:640px){
-      .paper,.hero-card{padding:22px}
-      .gallery{grid-template-columns:1fr}
-      .metrics{grid-template-columns:1fr}
-      .img-card img{height:240px}
-      .nav a{font-size:11px; padding:8px 10px}
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto}
+      *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.15s !important}
     }
   </style>
 </head>
-<body class="grain">
-  <div class="progress"><span id="bar"></span></div>
-  <nav class="nav">
-    <a href="#overview">总览</a>
-    <a href="#cases">样本</a>
-    <a href="#method">方法</a>
-    <a href="#insight">洞见</a>
-    <a href="#sources">图源</a>
-  </nav>
-  <header class="hero" id="top">
-    <div class="hero-card fade">
-      <div class="eyebrow">Ancient Architecture Research Roadshow</div>
-      <h1>古建筑调研：<br>木构、尺度与时间</h1>
-      <p>这是一份适合直接路演的古建筑调研网页。它用网页而非传统 PPT 的方式，把对象价值、结构证据、调研方法与保护建议放在同一条叙事链里：一边保留纸本与展陈式阅读的厚重感，一边利用浏览器的滚动、动画、导航与可扩展性，把“研究过程”本身展示出来。</p>
-      <div class="hero-grid">
-        <div class="fact"><strong>对象不是“景点”</strong>古建筑调研首先面对的是时代信息、构造逻辑与保存状态，而不是单纯的视觉欣赏。</div>
-        <div class="fact"><strong>网页不是“花哨外壳”</strong>它让章节跳转、热点注释、图像分层与证据链展示变得自然，尤其适合研究型路演。</div>
-      </div>
-    </div>
-  </header>
+<body>
+  <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="hud">
+    <div class="hud-pill" id="hudTitle">古建筑调研 · HTML 路演</div>
+    <div class="hud-info"><span id="slideCounter">01 / 20</span><span>空格 / ↑↓ / 点击右侧导航</span></div>
+  </div>
+  <nav class="nav" id="navDots" aria-label="sections"></nav>
+
   <main>
-    <section class="block" id="overview">
-      <div class="wrap paper fade">
-        <div class="section-top">
+    <section class="slide theme-hero" id="s1" data-label="封面">
+      <div class="slide-content">
+        <div class="floater a"></div><div class="floater b"></div>
+        <div class="hero-grid">
           <div>
-            <div class="eyebrow" style="color:#8d6540">01 · 调研总览</div>
-            <h2>为什么古建筑调研特别适合用 HTML 做路演</h2>
-            <p>因为这类内容天然包含“对象图像 + 构造判断 + 时间线 + 保护建议 + 图源说明”。PPT 很容易把它们拆散，而网页能把这些层次保留在同一阅读空间里，让观众更像在读一份展陈说明或研究版面。</p>
-          </div>
-          <div class="num">01</div>
-        </div>
-        <div class="grid-2">
-          <div class="card">
-            <h3>网页表达的三点优势</h3>
-            <ul>
-              <li>同屏容纳图像、注释和结论，阅读顺序更接近真实研究现场。</li>
-              <li>滚动与导航形成空间化叙事，比“翻页”更适合讲时间与构造演化。</li>
-              <li>后续可继续补图、补文献、补地图，直接演变成项目主页或数字展陈。</li>
-            </ul>
-            <div class="chips">
-              <span class="chip">可视化证据链</span>
-              <span class="chip">可继续扩展</span>
-              <span class="chip">更适合研究汇报</span>
+            <div class="eyebrow reveal" style="--delay:.04s">Ancient Architecture Research · Web-native Deck</div>
+            <div class="calligraphy reveal" style="--delay:.08s">木构的时间、技艺与保存</div>
+            <h1 class="hero-title reveal" style="--delay:.12s">古建筑调研：从结构逻辑到数字修护</h1>
+            <p class="lede reveal" style="--delay:.18s;max-width:40em">这不是一份把图片堆进 PPT 的介绍，而是一份适合路演的、可交互的 HTML 调研页：它能展示案例、切换结构说明、叠加图像证据、保留图源链接，并在浏览器中直接作为成果页面继续生长。</p>
+            <div class="capsule-row reveal" style="--delay:.22s">
+              <span class="capsule">20 页左右</span>
+              <span class="capsule">历史厚重感</span>
+              <span class="capsule">图像可追溯</span>
+              <span class="capsule">适合路演</span>
             </div>
           </div>
-          <div class="card">
-            <h3>本次路演结构</h3>
+          <div class="panel reveal-scale" style="--delay:.18s;padding:1.1rem;align-self:end;max-width:430px;justify-self:end;background:rgba(255,250,245,.12);border-color:rgba(255,255,255,.12)">
+            <div class="eyebrow" style="color:#e6c89a">研究导引</div>
+            <div class="big-calligraphy" style="margin-top:.6rem">看见木构</div>
+            <p class="body" style="margin-top:.6rem;color:rgba(245,237,229,.82)">以南禅寺、佛光寺东大殿、应县木塔、故宫角楼为线索，从年代、尺度、结构、病害到数字化建档，重构一条“可讲、可看、可验证”的古建筑研究叙事。</p>
+          </div>
+        </div>
+        <div class="footline reveal" style="--delay:.3s">
+          <p class="tiny">建议联网打开，以加载在线图像与字体。</p>
+          <div class="page-no">01</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide theme-paper" id="s2" data-label="为什么值得做">
+      <div class="slide-content">
+        <div class="eyebrow reveal">Problem Framing</div>
+        <h2 class="section-title reveal" style="--delay:.08s">为什么古建筑调研，值得用一份更“像作品”的 HTML 来讲？</h2>
+        <div class="three-col" style="margin-top:.2rem">
+          <article class="card reveal" style="--delay:.12s"><h3>它不是静态对象</h3><p>古建筑是由台基、柱网、斗拱、屋架、屋面、彩画与环境共同构成的系统；如果只给一张图，很难把结构关系、尺度层级和观者动线真正讲清。</p></article>
+          <article class="card reveal" style="--delay:.18s"><h3>它需要证据层</h3><p>调研不是“看着古”，而是要把年代、构造、病害、修缮原则与数字测绘证据一层层交代出来。HTML 更适合做图文叠层和细节展开。</p></article>
+          <article class="card reveal" style="--delay:.24s"><h3>它天然适合路演</h3><p>古建筑主题有强烈的气质需求：纸感、留白、慢节奏、可追溯来源。浏览器原生的动效与交互，会比模板式翻页更像一次“展陈导览”。</p></article>
+        </div>
+        <div class="metric-row reveal" style="--delay:.28s">
+          <div class="metric"><strong>4 个</strong><span>核心案例串联时间线</span></div>
+          <div class="metric"><strong>3 条</strong><span>主线：价值、结构、保存</span></div>
+          <div class="metric"><strong>1 份</strong><span>HTML 成果可继续扩展为专题页</span></div>
+        </div>
+        <div class="footline"><p class="tiny">这一页回答“为什么不是普通课件”。</p><div class="page-no">02</div></div>
+      </div>
+    </section>
+
+    <section class="slide theme-paper" id="s3" data-label="研究框架">
+      <div class="slide-content">
+        <div class="two-col">
+          <div>
+            <div class="eyebrow reveal">Research Framework</div>
+            <h2 class="section-title reveal" style="--delay:.08s">一条适合调研路演的主线：先立对象，再看结构，再谈保存。</h2>
+            <p class="body reveal" style="--delay:.14s;max-width:40em">这份 HTML 采用“问题—案例—结构—方法—策略—交付”的叙事方式：既保留学术性，又保留展示感。你可以把它当作汇报页，也可以把它当作网页版小型展览。</p>
+            <div class="capsule-row reveal" style="--delay:.2s">
+              <span class="capsule">文献与档案</span>
+              <span class="capsule">现场踏查</span>
+              <span class="capsule">数字测绘</span>
+              <span class="capsule">保护建议</span>
+            </div>
+          </div>
+          <div class="panel reveal-scale" style="--delay:.18s">
             <div class="timeline">
-              <div class="tl"><strong>对象</strong><div>南禅寺大殿、佛光寺东大殿、应县木塔、故宫中轴秩序</div></div>
-              <div class="tl"><strong>线索</strong><div>年代、结构、尺度、保存状态、空间秩序</div></div>
-              <div class="tl"><strong>输出</strong><div>样本认识、方法框架、保护判断与展示策略</div></div>
+              <div class="timeline-item"><div class="timeline-year">I</div><h3>选点</h3><p>以唐、辽、明三个关键断面，观察木构空间与礼制秩序如何变化。</p></div>
+              <div class="timeline-item"><div class="timeline-year">II</div><h3>看图</h3><p>把建筑本体、环境关系与动线体验一起放进研究视野，而不是只看立面。</p></div>
+              <div class="timeline-item"><div class="timeline-year">III</div><h3>读构造</h3><p>从斗拱、柱网、屋顶、梁架出发，理解“为什么它能站到今天”。</p></div>
+              <div class="timeline-item"><div class="timeline-year">IV</div><h3>提策略</h3><p>把病害、排水、监测、数字存档与公众阐释放进同一张计划表。</p></div>
             </div>
           </div>
         </div>
+        <div class="footline"><p class="tiny">研究框架越清楚，后面的案例就越有力量。</p><div class="page-no">03</div></div>
       </div>
     </section>
 
-    <section class="block" id="cases">
-      <div class="wrap paper fade">
-        <div class="section-top">
+    <section class="slide theme-ink" id="s4" data-label="时间断面">
+      <div class="slide-content">
+        <div class="eyebrow reveal">Case Axis</div>
+        <h2 class="section-title reveal" style="--delay:.08s;max-width:18ch">用四个典型案例，把中国古建筑的时间断面排成一条可讲述的轴线。</h2>
+        <div class="timeline" style="margin-top:.4rem">
+          <div class="timeline-item reveal" style="--delay:.12s"><div class="timeline-year">782</div><h3>南禅寺大殿</h3><p>唐代木构的极简与稳健：小体量，却是中国现存最早的木构大殿之一。</p></div>
+          <div class="timeline-item reveal" style="--delay:.18s"><div class="timeline-year">857</div><h3>佛光寺东大殿</h3><p>大体量、深出檐、雄浑屋面，将唐代木构的气势与秩序完整保存下来。</p></div>
+          <div class="timeline-item reveal" style="--delay:.24s"><div class="timeline-year">1056</div><h3>应县木塔</h3><p>以超大木结构和多层空间回应尺度挑战，是木构技术与宗教空间结合的高峰。</p></div>
+          <div class="timeline-item reveal" style="--delay:.30s"><div class="timeline-year">1406–1420</div><h3>紫禁城角楼 / 宫城体系</h3><p>进入成熟的礼制秩序与轴线布局，建筑不只是一栋房屋，而是一整套空间政治。</p></div>
+        </div>
+        <div class="quote reveal" style="--delay:.34s">如果说唐代木构更像“厚实的结构语法”，那么宫城体系则把这种语法放大成国家尺度的空间秩序。</div>
+        <div class="footline"><p class="tiny">这一页是整场路演的时间轴骨架。</p><div class="page-no">04</div></div>
+      </div>
+    </section>
+
+    <section class="slide theme-paper" id="s5" data-label="案例一 · 南禅寺">
+      <div class="slide-content">
+        <div class="two-col">
+          <article class="image-card reveal-scale"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Nanchan%20Temple%201.JPG" alt="南禅寺大殿"><p class="caption">南禅寺大殿外观。图像来源见页末总表。<span class="source"><a href="https://commons.wikimedia.org/wiki/File:Nanchan_Temple_1.JPG" target="_blank" rel="noreferrer noopener">Wikimedia Commons</a></span></p></article>
           <div>
-            <div class="eyebrow" style="color:#8d6540">02 · 代表样本</div>
-            <h2>从唐代木构到皇家空间秩序：四个典型对象</h2>
-            <p>为了让观众快速建立认知，本次调研选择“早期木构个案 + 高层木塔 + 皇家城市空间”三种不同尺度的对象。它们共同构成了理解中国古建筑的重要入口。</p>
+            <div class="eyebrow reveal">Case 01 · Tang Minimalism</div>
+            <h2 class="section-title reveal" style="--delay:.08s">南禅寺大殿：尺度不大，却给出了唐代木构最克制的答案。</h2>
+            <p class="body reveal" style="--delay:.14s">作为公元 782 年有明确题记可考的实例，南禅寺大殿常被用来理解唐代木构的“简而不弱”。它的平面接近方形，体量克制，出檐清晰，结构逻辑直接，能帮助观众快速建立对早期木构的基础判断。</p>
+            <div class="three-col" style="margin-top:.6rem">
+              <div class="card reveal" style="--delay:.18s"><h3>年代价值</h3><p>题记可考，使其成为研究唐代木构的重要坐标。</p></div>
+              <div class="card reveal" style="--delay:.24s"><h3>空间特征</h3><p>近方形平面与深远出檐，让整体气质安静而有重量。</p></div>
+              <div class="card reveal" style="--delay:.30s"><h3>讲述重点</h3><p>适合作为“古建筑入门页”，先把观众带进木构的基本语法里。</p></div>
+            </div>
+            <p class="tiny" style="margin-top:.65rem">讲法建议：先讲“它为什么重要”，再讲“它为什么看起来不夸张却很稳”。</p>
           </div>
-          <div class="num">02</div>
         </div>
-        <div class="metrics">
-          <div class="metric"><b>782</b><span>南禅寺大殿常见纪年</span></div>
-          <div class="metric"><b>857</b><span>佛光寺东大殿重建年代</span></div>
-          <div class="metric"><b>1056</b><span>应县木塔建成时间</span></div>
-          <div class="metric"><b>1406–1420</b><span>紫禁城主要营建期</span></div>
-        </div>
+        <div class="footline"><p class="tiny">事实参考：页末引用中含 Nanchan Temple 资料页。</p><div class="page-no">05</div></div>
       </div>
     </section>
 
-    <section class="block">
-      <div class="wrap paper fade">
-        <div class="grid-2">
-          <div class="img-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/03/NanchanTemple.jpg" alt="南禅寺大殿">
-            <div class="img-note">南禅寺大殿常被视为中国现存最早的木构建筑实例之一。对它的关注，不只是因为“古老”，更因为它为理解早期木构尺度、构架与屋顶关系提供了稀缺样本。</div>
+    <section class="slide theme-paper" id="s6" data-label="案例二 · 佛光寺">
+      <div class="slide-content">
+        <div class="two-col">
+          <div>
+            <div class="eyebrow reveal">Case 02 · Grand Tang Hall</div>
+            <h2 class="section-title reveal" style="--delay:.08s">佛光寺东大殿：当木构从“早”走向“大”，屋顶与斗拱就开始发声。</h2>
+            <p class="body reveal" style="--delay:.14s">东大殿重建于 857 年，经常被视作现存规模最大、保存最完整的唐代木结构代表之一。它最适合用来讲“气势”的来源：深远屋檐、厚重斗拱、从容柱网，以及屋面曲线如何把结构与视觉统一起来。</p>
+            <div class="metric-row" style="margin-top:.55rem">
+              <div class="metric reveal" style="--delay:.18s"><strong>857</strong><span>东大殿重建时间</span></div>
+              <div class="metric reveal" style="--delay:.24s"><strong>唐代</strong><span>木构技术的成熟样本</span></div>
+              <div class="metric reveal" style="--delay:.30s"><strong>35 尊</strong><span>殿内唐代彩塑常被一并提及</span></div>
+            </div>
+            <div class="quote reveal" style="--delay:.34s;margin-top:.65rem">在路演里，这一页适合承担“震住观众”的任务：不是靠巨量文字，而是靠体量、檐口和节奏感。</div>
           </div>
-          <div class="card">
-            <div class="eyebrow" style="color:#8d6540">Case A</div>
-            <h2>南禅寺大殿：简洁尺度中的早期木构信息</h2>
-            <p>路演时讲南禅寺，不应只说“唐代很早”。更重要的是让观众意识到：在一个体量并不巨大的木构中，我们能看到柱网、屋顶、斗栱与整体比例如何共同工作。它像一本被保存下来的“木构语法入门”。</p>
-            <div class="sticky-note">这一页最适合讲“为什么少量样本也很重要”：因为当保存下来的早期木构极少，每一个对象都不是普通建筑，而是理解时代构造逻辑的关键证据。</div>
-          </div>
+          <article class="image-card reveal-scale"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Foguang%20Temple%208.JPG" alt="佛光寺东大殿"><p class="caption">佛光寺东大殿正面。<span class="source"><a href="https://commons.wikimedia.org/wiki/File:Foguang_Temple_8.JPG" target="_blank" rel="noreferrer noopener">Wikimedia Commons</a></span></p></article>
         </div>
+        <div class="footline"><p class="tiny">调研提示：这页最适合结合斗拱、屋脊、檐下阴影来讲。</p><div class="page-no">06</div></div>
       </div>
     </section>
 
-    <section class="block">
-      <div class="wrap paper fade">
-        <div class="grid-2">
-          <div class="card">
-            <div class="eyebrow" style="color:#8d6540">Case B</div>
-            <h2>佛光寺东大殿：大体量木构中的成熟秩序</h2>
-            <p>佛光寺东大殿常用于展示唐代成熟木构的壮阔尺度。它和南禅寺对照起来看，意义就会非常清楚：前者像“早期语法样本”，后者则像“成熟写作范例”。从屋顶出檐、空间进深到整体体量，观众都更容易感受到唐代木构的宏大与稳定。</p>
-            <div class="chips">
-              <span class="chip">大体量</span>
-              <span class="chip">成熟构架</span>
-              <span class="chip">对照性极强</span>
+    <section class="slide theme-dark" id="s7" data-label="案例三 · 应县木塔">
+      <div class="slide-content">
+        <div class="two-col">
+          <article class="image-card tall reveal-scale"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Wutai%202009%20350.jpg" alt="应县木塔"><p class="caption">应县木塔（佛宫寺释迦塔）外观。<span class="source"><a href="https://commons.wikimedia.org/wiki/File:Wutai_2009_350.jpg" target="_blank" rel="noreferrer noopener">Wikimedia Commons</a></span></p></article>
+          <div>
+            <div class="eyebrow reveal">Case 03 · Vertical Timber Mastery</div>
+            <h2 class="section-title reveal" style="--delay:.08s;max-width:14ch">应县木塔：把木构技术推到高耸尺度之后，结构就变成了一场公开的力学表演。</h2>
+            <p class="body reveal" style="--delay:.14s">这座建于 1056 年的木塔，被广泛描述为高约 67.31 米、外观五层而内部共九层的多层木结构杰作。对于路演而言，它最适合讲“木构不只会平铺，还能向上组织复杂空间”。</p>
+            <div class="three-col" style="margin-top:.6rem">
+              <div class="card reveal" style="--delay:.18s"><h3>高度</h3><p>67.31 米左右的尺度，让塔身成为观察受力与稳定性的天然课堂。</p></div>
+              <div class="card reveal" style="--delay:.24s"><h3>层级</h3><p>表面五层、内部九层，使“楼—阁—塔”的空间体验更加丰富。</p></div>
+              <div class="card reveal" style="--delay:.30s"><h3>路演重点</h3><p>可把它作为“技术巅峰页”，连接工艺、宗教与结构抗震话题。</p></div>
             </div>
           </div>
-          <div class="img-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Foguang_Temple_2.jpg" alt="佛光寺东大殿">
-            <div class="img-note">佛光寺东大殿的展示价值在于：它让“唐代木构”不再抽象，而变成可以被体量、进深、檐口与整体稳定感直接感知的空间经验。</div>
-          </div>
         </div>
+        <div class="footline"><p class="tiny">这一页最适合使用大图、慢动画和少量高信息文字。</p><div class="page-no">07</div></div>
       </div>
     </section>
 
-    <section class="block">
-      <div class="wrap paper fade">
-        <div class="grid-2">
-          <div class="img-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/39/Wutai_2009_350.jpg" alt="应县木塔">
-            <div class="img-note">应县木塔最适合在路演中承担“震撼点”。但震撼之后更重要的是说明：如此高的纯木结构，为何能长期存在？它依赖的不是某一个奇迹构件，而是整体结构体系与长期维护共同作用。</div>
-          </div>
-          <div class="card">
-            <div class="eyebrow" style="color:#8d6540">Case C</div>
-            <h2>应县木塔：高层纯木结构如何成为结构史问题</h2>
-            <p>应县木塔之所以在所有古建中格外有传播力，是因为它把“木”与“高”这两个词放在了一起。对研究型路演来说，最重要的不是只让人感到壮观，而是把“层级体系、稳定逻辑、修缮压力、长期保存”讲成一个结构问题。</p>
-            <div class="sticky-note">当观众已经被高度和年代吸引时，下一步就要立刻把注意力从“奇观”转向“结构与保护”。这是研究型展示和旅游介绍最大的差别。</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="block">
-      <div class="wrap paper fade">
-        <div class="grid-2">
-          <div class="card">
-            <div class="eyebrow" style="color:#8d6540">Case D</div>
-            <h2>故宫：从单体建筑转向城市级空间秩序</h2>
-            <p>当我们从木构个案转向故宫，研究尺度就发生了变化。此时重点不再是单体结构细部，而是中轴线、前朝后寝、等级秩序与礼制逻辑。故宫在路演中的价值，在于它提醒观众：古建筑研究从来不只研究构件，也研究空间如何组织权力与秩序。</p>
-          </div>
-          <div class="img-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/81/Forbidden_City_Beijing_Shenwumen_Gate.JPG" alt="故宫神武门">
-            <div class="img-note">故宫尤其适合网页展示，因为网页滚动天然有“轴线展开”的感觉。用纵向叙事讲中轴秩序，往往比横向翻页更有空间感。</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="full-quote fade" id="insight">
-      <div class="wrap">
-        <div class="eyebrow">核心洞见</div>
-        <p>古建筑研究最值得被看见的，不只是“它很老、很美、很壮观”，而是：它如何以结构、尺度、材料与空间秩序，持续保存了一个时代的建造逻辑。</p>
-      </div>
-    </section>
-
-    <section class="block" id="method">
-      <div class="wrap paper fade">
-        <div class="section-top">
+    <section class="slide theme-paper" id="s8" data-label="案例四 · 紫禁城">
+      <div class="slide-content">
+        <div class="two-col">
           <div>
-            <div class="eyebrow" style="color:#8d6540">03 · 调研方法</div>
-            <h2>从现场到结论：一套适合答辩与路演的方法框架</h2>
-            <p>研究型网页最能体现优势的地方，在于它能把方法本身讲清楚：你不是在“展示一堆图”，而是在展示你如何从图像、文献和现场观察走向判断。</p>
+            <div class="eyebrow reveal">Case 04 · Palace Order</div>
+            <h2 class="section-title reveal" style="--delay:.08s">故宫角楼与宫城体系：木构从单体建筑，走向礼制与秩序的空间编排。</h2>
+            <p class="body reveal" style="--delay:.14s">如果前面的案例让我们理解“木构本身”，那么故宫则让我们理解“木构如何组织国家尺度的空间”。紫禁城建于 1406–1420 年之间，沿中轴对称展开，前朝后寝的空间序列清晰，是理解中国古代宫殿规划与建筑等级制度的关键样本。</p>
+            <div class="capsule-row reveal" style="--delay:.20s">
+              <span class="capsule">中轴线</span>
+              <span class="capsule">对称布局</span>
+              <span class="capsule">前朝后寝</span>
+              <span class="capsule">礼制秩序</span>
+            </div>
+            <div class="quote reveal" style="--delay:.28s;margin-top:.65rem">角楼不是一座“漂亮的小楼”，而是巨大宫城边界被精巧转译为视觉标志的节点。</div>
           </div>
-          <div class="num">03</div>
+          <article class="image-card reveal-scale"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Corner%20Tower%20of%20Forbidden%20City%20(20240627).jpg" alt="故宫角楼"><p class="caption">故宫角楼。<span class="source"><a href="https://commons.wikimedia.org/wiki/File:Corner_Tower_of_Forbidden_City_(20240627).jpg" target="_blank" rel="noreferrer noopener">Wikimedia Commons</a></span></p></article>
         </div>
-        <div class="method">
-          <div class="card"><h3>对象确认</h3><p>先明确研究对象的年代、类型、所在区域与保存背景，让问题定义足够清楚。</p></div>
-          <div class="card"><h3>图像与测绘</h3><p>通过立面、构造节点、轴测或平面信息建立对象的可视化证据基础。</p></div>
-          <div class="card"><h3>文献互证</h3><p>将现场观察与公开文献、博物馆说明或 UNESCO / 官方资料进行交叉核对。</p></div>
-          <div class="card"><h3>保护判断</h3><p>最后从结构、环境和展示传播三方面提出优先级明确的建议，而不是泛泛而谈。</p></div>
-        </div>
+        <div class="footline"><p class="tiny">适合在路演中承接“建筑本体”与“空间政治”之间的转换。</p><div class="page-no">08</div></div>
       </div>
     </section>
 
-    <section class="block">
-      <div class="wrap paper fade">
-        <div class="section-top">
-          <div>
-            <div class="eyebrow" style="color:#8d6540">04 · 路演设计</div>
-            <h2>为什么这份网页比传统 PPT 更适合古建筑调研展示</h2>
-            <p>因为古建内容本身就更接近“展板 + 图录 + 研究说明”的混合体，而网页可以天然容纳这种多层阅读结构。</p>
+    <section class="slide theme-paper" id="s9" data-label="结构语言">
+      <div class="slide-content">
+        <div class="two-col">
+          <article class="image-card small reveal-scale" style="align-self:start"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/The%20instruction%20of%20diffrent%20parts%20of%20Chinese%20Dougong.jpg" alt="斗拱部件示意图" style="object-fit:contain;background:#f5eee4"><p class="caption">斗拱部件示意图。<span class="source"><a href="https://commons.wikimedia.org/wiki/File:The_instruction_of_diffrent_parts_of_Chinese_Dougong.jpg" target="_blank" rel="noreferrer noopener">Wikimedia Commons</a></span></p></article>
+          <div class="tab-shell">
+            <div class="eyebrow reveal">Interactive Structure Notes</div>
+            <h2 class="section-title reveal" style="--delay:.08s">一页看懂木构的结构语言：台基、柱网、斗拱与屋顶，其实是连续的。</h2>
+            <div class="tab-row reveal" style="--delay:.14s" id="structureTabs">
+              <button class="tab-btn active" data-tab="tai">台基</button>
+              <button class="tab-btn" data-tab="zhu">柱网</button>
+              <button class="tab-btn" data-tab="dou">斗拱</button>
+              <button class="tab-btn" data-tab="roof">屋顶</button>
+            </div>
+            <div class="tab-panel reveal" style="--delay:.18s" id="structurePanel">
+              <h3>台基：先把建筑从地面抬起来</h3>
+              <ul>
+                <li>它承担防潮、找平与仪式性抬升三重任务，是“看不见却先起作用”的基础层。</li>
+                <li>在调研中，台基需要结合排水、沉降、边角风化和游线冲击一起判断。</li>
+                <li>路演讲法：先从台基说起，观众会更容易理解为什么古建总是先“离地”。</li>
+              </ul>
+            </div>
           </div>
-          <div class="num">04</div>
         </div>
-        <div class="gallery">
-          <figure>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Forbidden_City_Beijing_Dacheng_Hall.JPG" alt="故宫建筑细节">
-            <figcaption>图像可以承担第一层吸引力：让观众先进入对象，再进入说明。</figcaption>
-          </figure>
-          <figure>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Yingxian_Wooden_Pagoda_2013.JPG" alt="应县木塔另一视角">
-            <figcaption>网页更适合把多个视角放在同一组中，形成“对象 — 细节 — 判断”的连续阅读。</figcaption>
-          </figure>
-          <figure>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/f0/Foguang_Temple_Dong_Da_Dian.jpg" alt="佛光寺东大殿另一视角">
-            <figcaption>页面还能继续扩展，未来可接入平面图、构造图、互动标注，生长为数字展陈。</figcaption>
-          </figure>
+        <div class="footline"><p class="tiny">这页用按钮切换说明，正好展示 HTML 比 PPT 更自然的交互能力。</p><div class="page-no">09</div></div>
+      </div>
+    </section>
+
+    <section class="slide theme-paper" id="s10" data-label="调研方法">
+      <div class="slide-content">
+        <div class="two-col">
+          <div>
+            <div class="eyebrow reveal">Methodology</div>
+            <h2 class="section-title reveal" style="--delay:.08s">从踏查到数字建档：古建筑调研最怕只看“像不像”，不看“证据链”。</h2>
+            <p class="body reveal" style="--delay:.14s">这里给出一个适合学生团队、研究小组或课程项目的工作流。它既能进入学术汇报，也可以进入公众传播页面。点击下方模式可查看三种不同的工作重点。</p>
+            <div class="tab-row reveal" style="--delay:.2s" id="methodTabs">
+              <button class="tab-btn active" data-view="field">现场记录</button>
+              <button class="tab-btn" data-view="digital">数字测绘</button>
+              <button class="tab-btn" data-view="repair">修缮判断</button>
+            </div>
+          </div>
+          <div class="switch-card">
+            <div class="switch-view active" id="view-field">
+              <div class="method-card"><h3>1. 踏查与照片索引</h3><p>从院落、朝向、动线、立面、檐下、柱础、节点细部做有编号的图像记录，而不是无序拍照。</p></div>
+              <div class="method-card"><h3>2. 病害草图与口述线索</h3><p>把裂缝、渗水、虫害、掉瓦与临时修补点同步记录，并补充管理人员与当地居民的叙述线索。</p></div>
+            </div>
+            <div class="switch-view" id="view-digital">
+              <div class="method-card"><h3>1. 无人机倾斜摄影 / 全景补拍</h3><p>用于获得屋面、转角和整体关系，弥补平视摄影难以覆盖的部分。</p></div>
+              <div class="method-card"><h3>2. 点云、纹理与几何对齐</h3><p>将照片、测距、点云或手工尺寸放进同一坐标逻辑，形成可持续更新的数字底稿。</p></div>
+            </div>
+            <div class="switch-view" id="view-repair">
+              <div class="method-card"><h3>1. 把问题分层</h3><p>优先区分结构安全问题、材料老化问题与游览运营问题，避免所有问题混在一起。</p></div>
+              <div class="method-card"><h3>2. 把建议落到时间轴</h3><p>短期止损、中期监测、长期数字建档与公众阐释，应该是不同层级的动作。</p></div>
+            </div>
+          </div>
         </div>
+        <div class="footline"><p class="tiny">这页可直接在现场点击切换内容，适合答辩与路演。</p><div class="page-no">10</div></div>
+      </div>
+    </section>
+
+    <section class="slide theme-paper" id="s11" data-label="踏查笔记">
+      <div class="slide-content">
+        <div class="two-col">
+          <div class="notebook reveal-scale">
+            <div class="eyebrow" style="color:var(--red)">Field Notebook</div>
+            <h2 class="section-title" style="font-size:clamp(1.5rem,2.4vw,2.4rem);margin-top:.55rem;max-width:12ch">调研现场真正该带走的，不只是“美图”，而是一份可复盘的笔记。</h2>
+            <ul class="checklist" style="margin-top:.8rem">
+              <li>记录建筑朝向、院落入口、拍摄点位和时间，让照片能回到空间逻辑中。</li>
+              <li>屋面、檐口、斗拱、柱础、台基转角至少拍一轮，以免之后没有节点证据。</li>
+              <li>对裂缝、渗水、风化、残损、现代加固和游客动线分别编号，后期更好汇总。</li>
+              <li>把当地口述和馆方说明同步记录，避免最后只剩“技术眼”，没有“地方眼”。</li>
+            </ul>
+          </div>
+          <div class="three-col">
+            <div class="card reveal" style="--delay:.14s"><h3>观察</h3><p>看轴线、看进深、看屋面起伏与阴影层次。</p></div>
+            <div class="card reveal" style="--delay:.20s"><h3>标注</h3><p>所有图像最好有编号、方向与对象说明。</p></div>
+            <div class="card reveal" style="--delay:.26s"><h3>回看</h3><p>当天就做一次删选与补拍清单，减少漏项。</p></div>
+            <div class="card reveal" style="--delay:.32s"><h3>联系</h3><p>把建筑本体与环境、游线、排水一起看。</p></div>
+            <div class="card reveal" style="--delay:.38s"><h3>对照</h3><p>现场观察与历史照片、档案描述互证。</p></div>
+            <div class="card reveal" style="--delay:.44s"><h3>归档</h3><p>图片、手绘、录音、定位最好统一命名。</p></div>
+          </div>
+        </div>
+        <div class="footline"><p class="tiny">这页更像研究者的工作台，而不是观光手册。</p><div class="page-no">11</div></div>
+      </div>
+    </section>
+
+    <section class="slide theme-dark" id="s12" data-label="病害与风险">
+      <div class="slide-content">
+        <div class="eyebrow reveal">Risk Assessment</div>
+        <h2 class="section-title reveal" style="--delay:.08s;max-width:14ch">病害与风险，不该只用一张“损坏照片”交代完。</h2>
+        <div class="four-col" style="margin-top:.35rem">
+          <div class="card reveal" style="--delay:.12s"><h3>渗水与潮气</h3><p>屋面破损、檐沟排水不畅与台基返潮会直接影响木材稳定性与彩画保存。</p></div>
+          <div class="card reveal" style="--delay:.18s"><h3>结构变形</h3><p>柱身倾斜、梁架下挠、节点松动往往需要结合长期监测，而不是凭一张照片下结论。</p></div>
+          <div class="card reveal" style="--delay:.24s"><h3>材料老化</h3><p>虫蚀、腐朽、反复修补留下的材料不兼容，会让表面问题变成深层问题。</p></div>
+          <div class="card reveal" style="--delay:.30s"><h3>人流压力</h3><p>观众停留、踩踏、围挡方式和维护频率，都会影响遗产现场的长期状态。</p></div>
+        </div>
+        <div class="metric-row reveal" style="--delay:.34s">
+          <div class="metric"><strong>先分级</strong><span>安全风险 / 材料风险 / 展示运营风险</span></div>
+          <div class="metric"><strong>再判断</strong><span>可观察现象 ≠ 最终病因</span></div>
+          <div class="metric"><strong>后介入</strong><span>先止损，再监测，再修缮</span></div>
+        </div>
+        <div class="footline"><p class="tiny">这一页适合切入“保护不是翻新”的观念。</p><div class="page-no">12</div></div>
+      </div>
+    </section>
+
+    <section class="slide theme-paper" id="s13" data-label="保护策略">
+      <div class="slide-content">
+        <div class="two-col">
+          <div>
+            <div class="eyebrow reveal">Conservation Strategy</div>
+            <h2 class="section-title reveal" style="--delay:.08s">提出保护策略时，最重要的不是“修得新”，而是让建筑继续真实地活着。</h2>
+            <p class="body reveal" style="--delay:.14s;max-width:42em">这类调研最后的价值，不在于给出宏大口号，而在于把短期止损、中期监测和长期数字建档拆开。这样，方案才不会停留在文本层，而能进入真正的管理流程。</p>
+          </div>
+          <div class="three-col reveal-scale" style="--delay:.18s;grid-template-columns:repeat(2,minmax(0,1fr))">
+            <div class="card"><h3>最小干预</h3><p>先确保安全与稳定，避免因为“看起来更整齐”而过度更换原构件。</p></div>
+            <div class="card"><h3>可逆性</h3><p>现代加固、支撑或监测装置应便于未来撤除与校正。</p></div>
+            <div class="card"><h3>材料兼容</h3><p>新材料与旧材料之间的应力、含水与老化速率需要匹配。</p></div>
+            <div class="card"><h3>持续监测</h3><p>结构状态、渗漏点、温湿度与游客流线都应有周期性记录。</p></div>
+          </div>
+        </div>
+        <div class="quote reveal" style="--delay:.28s">真正好的保护策略，不是让观众忘记建筑经历过时间，而是让时间留下的痕迹可以被理解、被监测、被有节制地照顾。</div>
+        <div class="footline"><p class="tiny">路演时，这一页通常承担“价值立场”的作用。</p><div class="page-no">13</div></div>
+      </div>
+    </section>
+
+    <section class="slide theme-paper" id="s14" data-label="数字遗产">
+      <div class="slide-content">
+        <div class="two-col">
+          <div>
+            <div class="eyebrow reveal">Digital Heritage</div>
+            <h2 class="section-title reveal" style="--delay:.08s">数字遗产不是“再做一份模型”，而是给建筑建立一个可持续更新的知识容器。</h2>
+            <p class="body reveal" style="--delay:.14s">当调研进入数字阶段，照片、点云、节点说明、病害编号、修缮记录和公众传播内容都可以挂接到同一套页面体系里。HTML 的优势在这里会被放大：它既能展示，又能继续组织信息。</p>
+            <div class="capsule-row reveal" style="--delay:.20s">
+              <span class="capsule">Photogrammetry</span>
+              <span class="capsule">Point Cloud</span>
+              <span class="capsule">HBIM</span>
+              <span class="capsule">Issue Atlas</span>
+            </div>
+          </div>
+          <div class="stacked reveal-scale" style="--delay:.18s">
+            <div class="layer"><h3>图像层</h3><p>把全景、立面、节点、细部组织成可追溯的影像索引。</p></div>
+            <div class="layer"><h3>几何层</h3><p>通过摄影测量、激光扫描或手工测绘，获得可比对的几何底稿。</p></div>
+            <div class="layer"><h3>语义层</h3><p>将部位名称、病害描述、修缮建议和图源链接挂接到具体构件上。</p></div>
+          </div>
+        </div>
+        <div class="footline"><p class="tiny">这一页强调“数字化不是附属品，而是保存系统的一部分”。</p><div class="page-no">14</div></div>
+      </div>
+    </section>
+
+    <section class="slide theme-ink" id="s15" data-label="空间体验">
+      <div class="slide-content">
+        <div class="gallery-grid">
+          <article class="image-card reveal-scale"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Corner%20Tower%20of%20Forbidden%20City%20(20240627).jpg" alt="故宫角楼反射景观"><p class="caption">角楼与水面反射，最适合讲“远看是符号，近看是构造”。</p></article>
+          <div>
+            <div class="eyebrow reveal">Experience Narrative</div>
+            <h2 class="section-title reveal" style="--delay:.08s">古建筑调研不只是结构判断，也是在研究一种被组织过的身体经验。</h2>
+            <p class="body reveal" style="--delay:.14s">从牌楼、门殿、院落、回廊到高台与主殿，传统建筑通过抬高、转折、压缩、放大与留白，控制观者的节奏。路演时，不妨让观众意识到：他们不是在“看一栋楼”，而是在体验被建筑安排好的步伐与视线。</p>
+            <div class="three-col" style="margin-top:.6rem;grid-template-columns:1fr">
+              <div class="card reveal" style="--delay:.18s"><h3>步伐</h3><p>门槛、台阶、转折与院落开合，会自然改变观看速度。</p></div>
+              <div class="card reveal" style="--delay:.24s"><h3>视线</h3><p>檐口的阴影、屋面曲线和中轴的引导，会决定你先注意哪里。</p></div>
+              <div class="card reveal" style="--delay:.30s"><h3>情绪</h3><p>历史厚重感往往并非来自材料本身，而来自节奏、层次和比例共同形成的心理暗示。</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="footline"><p class="tiny">这是面向观众情绪的一页，让“研究”变得可感。</p><div class="page-no">15</div></div>
+      </div>
+    </section>
+
+    <section class="slide theme-paper" id="s16" data-label="HTML 优势">
+      <div class="slide-content">
+        <div class="eyebrow reveal">Why HTML Works Better Here</div>
+        <h2 class="section-title reveal" style="--delay:.08s;max-width:15ch">古建筑主题特别适合 HTML：因为它需要图层、热点、注释与慢节奏切换。</h2>
+        <div class="hotspot-stage reveal-scale" style="--delay:.16s;margin-top:.25rem">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Corner%20Tower%20of%20Forbidden%20City%20(20240627).jpg" alt="故宫角楼热点示意">
+          <div class="hotspot" style="left:18%; top:40%"><span class="hotspot-dot"></span><div class="hotspot-card"><h3>檐角</h3><p>适合做 hover 注释：解释起翘的轮廓如何形成视觉轻盈感。</p></div></div>
+          <div class="hotspot" style="left:48%; top:31%"><span class="hotspot-dot"></span><div class="hotspot-card"><h3>层层屋面</h3><p>HTML 可以把图像与结构说明绑在一起，不必另外跳转到备份页。</p></div></div>
+          <div class="hotspot" style="left:69%; top:58%"><span class="hotspot-dot"></span><div class="hotspot-card"><h3>水面与边界</h3><p>热点还能解释环境与建筑的关系，而不只是建筑本体。</p></div></div>
+        </div>
+        <div class="four-col" style="margin-top:.7rem">
+          <div class="card reveal" style="--delay:.22s"><h3>热点注释</h3><p>鼠标悬停即可解释节点，比 PPT 更自然。</p></div>
+          <div class="card reveal" style="--delay:.28s"><h3>图层切换</h3><p>结构、材料、风险、图源可以在同一页切换。</p></div>
+          <div class="card reveal" style="--delay:.34s"><h3>慢动画</h3><p>历史题材需要克制、细腻的过渡，网页更容易做到。</p></div>
+          <div class="card reveal" style="--delay:.40s"><h3>代码复用</h3><p>汇报结束后，这份页面还能长成专题页或线上展板。</p></div>
+        </div>
+        <div class="footline"><p class="tiny">这一页直接把“HTML 能替代 PPT”的优势落到古建筑场景里。</p><div class="page-no">16</div></div>
+      </div>
+    </section>
+
+    <section class="slide theme-paper" id="s17" data-label="路演设计">
+      <div class="slide-content">
+        <div class="two-col">
+          <div>
+            <div class="eyebrow reveal">Roadshow Storyboard</div>
+            <h2 class="section-title reveal" style="--delay:.08s">如果把这份古建筑调研真的拿去路演，最稳的结构是三幕式。</h2>
+            <div class="timeline" style="margin-top:.55rem;grid-template-columns:repeat(3,minmax(0,1fr))">
+              <div class="timeline-item reveal" style="--delay:.14s"><div class="timeline-year">A</div><h3>先立价值</h3><p>为什么这个建筑值得看、为什么它是时间的证据。</p></div>
+              <div class="timeline-item reveal" style="--delay:.20s"><div class="timeline-year">B</div><h3>再读结构</h3><p>把构造和空间关系讲清，观众才会相信你的判断。</p></div>
+              <div class="timeline-item reveal" style="--delay:.26s"><div class="timeline-year">C</div><h3>最后给行动</h3><p>把监测、修缮、数字建档和公众阐释落到清单。</p></div>
+            </div>
+          </div>
+          <div class="panel reveal-scale" style="--delay:.22s">
+            <h3 style="font-family:'Noto Serif SC',serif;font-size:1.28rem;margin-bottom:.5rem">一页一件事，观众最容易跟上</h3>
+            <ul class="checklist">
+              <li>前 4 页完成“立题”：历史位置、典型性、案例轴线。</li>
+              <li>中段完成“证据”：建筑图像、结构解释、现场调查、病害判断。</li>
+              <li>后段完成“行动”：保护原则、数字交付、路演价值与后续传播。</li>
+              <li>最后 1 页留给图源与事实来源，既专业也体面。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="footline"><p class="tiny">这页能把你的内容从“资料堆砌”变成“可讲故事”。</p><div class="page-no">17</div></div>
+      </div>
+    </section>
+
+    <section class="slide theme-paper" id="s18" data-label="阶段产出">
+      <div class="slide-content">
+        <div class="eyebrow reveal">Deliverables</div>
+        <h2 class="section-title reveal" style="--delay:.08s">如果把调研变成一个学期项目或比赛作品，最终至少应交出这四类成果。</h2>
+        <div class="delivery-grid" style="margin-top:.5rem">
+          <div class="delivery-card reveal" style="--delay:.12s"><h3>基础图册</h3><p>总平、立面、节点、踏查笔记与图像编号，形成后续讨论的最小公共底稿。</p></div>
+          <div class="delivery-card reveal" style="--delay:.18s"><h3>病害台账</h3><p>按部位、等级与成因线索组织问题，不把所有异常都写成同一句话。</p></div>
+          <div class="delivery-card reveal" style="--delay:.24s"><h3>数字模型</h3><p>不必一开始就求完美，但至少要有可对照、可迭代的几何与语义框架。</p></div>
+          <div class="delivery-card reveal" style="--delay:.30s"><h3>展示页面</h3><p>把研究成果转成 HTML，让它能继续用于答辩、展陈或线上传播。</p></div>
+        </div>
+        <div class="quote reveal" style="--delay:.36s;margin-top:.7rem">最好的古建筑调研成果，不是一本最后无人翻开的 PDF，而是一套还能继续被使用、被更新、被看见的知识界面。</div>
+        <div class="footline"><p class="tiny">这一页强调“交付意识”，对比赛和路演特别有用。</p><div class="page-no">18</div></div>
+      </div>
+    </section>
+
+    <section class="slide theme-dark" id="s19" data-label="结论">
+      <div class="slide-content">
+        <div class="eyebrow reveal">Closing Thesis</div>
+        <div class="calligraphy reveal" style="--delay:.08s">从木构细部，回到文明尺度</div>
+        <h2 class="section-title reveal" style="--delay:.12s;max-width:14ch">古建筑真正动人的，不只是古，而是它把结构、秩序、工艺与时间一起留在了现场。</h2>
+        <div class="three-col" style="margin-top:.55rem">
+          <div class="card reveal" style="--delay:.18s"><h3>对研究者</h3><p>它要求我们用更精细的证据意识去理解建筑，而不是凭印象说“很有味道”。</p></div>
+          <div class="card reveal" style="--delay:.24s"><h3>对保护者</h3><p>它提醒我们，真正的修护不是覆盖时间，而是帮助时间继续被看见。</p></div>
+          <div class="card reveal" style="--delay:.30s"><h3>对展示者</h3><p>它证明 HTML 不只是展示媒介，更可以成为古建筑研究的可持续表达容器。</p></div>
+        </div>
+        <div class="footline"><p class="tiny">收束时让观众记住一句话，而不是记住一堆零散页面。</p><div class="page-no">19</div></div>
+      </div>
+    </section>
+
+    <section class="slide theme-ink" id="s20" data-label="图源与参考">
+      <div class="slide-content">
+        <div class="eyebrow reveal">Credits & References</div>
+        <h2 class="section-title reveal" style="--delay:.08s">图片来源与事实参考</h2>
+        <div class="credit-grid" style="margin-top:.45rem">
+          <div class="credit-card reveal" style="--delay:.12s">
+            <h3>图片来源</h3>
+            <ul>
+              <li>南禅寺大殿照片：Wikimedia Commons，File:Nanchan Temple 1.JPG</li>
+              <li>佛光寺东大殿照片：Wikimedia Commons，File:Foguang Temple 8.JPG</li>
+              <li>应县木塔照片：Wikimedia Commons，File:Wutai 2009 350.jpg</li>
+              <li>故宫角楼照片：Wikimedia Commons，File:Corner Tower of Forbidden City (20240627).jpg</li>
+              <li>斗拱示意图：Wikimedia Commons，File:The instruction of diffrent parts of Chinese Dougong.jpg</li>
+            </ul>
+          </div>
+          <div class="credit-card reveal" style="--delay:.18s">
+            <h3>事实参考</h3>
+            <ul>
+              <li>UNESCO：Imperial Palaces of the Ming and Qing Dynasties in Beijing and Shenyang</li>
+              <li>UNESCO Tentative List：Wooden Structures of Liao Dynasty — Wooden Pagoda of Yingxian County</li>
+              <li>Palace Museum Explore：宫城布局、建筑层级与工艺条目</li>
+              <li>People's Daily / China Daily / China Culture：佛光寺、南禅寺相关建筑信息</li>
+            </ul>
+          </div>
+        </div>
+        <div class="panel reveal-scale" style="--delay:.24s;margin-top:.5rem">
+          <p class="body">这份 HTML 使用在线图像与网页链接，便于继续扩展成专题页、答辩页或线上展陈。若要离线分发，可将图片下载为本地 assets 后再打包。</p>
+          <div class="capsule-row" style="margin-top:.6rem">
+            <a class="capsule" href="https://whc.unesco.org/en/list/439/" target="_blank" rel="noreferrer noopener">UNESCO · Palace</a>
+            <a class="capsule" href="https://whc.unesco.org/en/tentativelists/5803/" target="_blank" rel="noreferrer noopener">UNESCO · Pagoda</a>
+            <a class="capsule" href="https://intl.dpm.org.cn/explore" target="_blank" rel="noreferrer noopener">Palace Museum</a>
+            <a class="capsule" href="https://en.people.cn/n3/2017/0830/c90000-9262434.html" target="_blank" rel="noreferrer noopener">Foguang Temple</a>
+            <a class="capsule" href="https://en.chinaculture.org/library/2008-02/15/content_34559.htm" target="_blank" rel="noreferrer noopener">Nanchan Temple</a>
+          </div>
+        </div>
+        <div class="footline"><p class="tiny">完。</p><div class="page-no">20</div></div>
       </div>
     </section>
   </main>
-  <footer id="sources">
-    <div class="wrap paper fade sources">
-      <div class="section-top">
-        <div>
-          <div class="eyebrow" style="color:#8d6540">05 · 图源与事实参考</div>
-          <h2>公开图源与资料依据</h2>
-          <p>本页为便于线上部署，主要使用公开可访问图片链接；正式展示时，建议进一步核对图源版权要求并固定本地副本。</p>
-        </div>
-        <div class="num">05</div>
-      </div>
-      <ul>
-        <li>Wikimedia Commons：南禅寺、佛光寺、应县木塔、故宫相关图片页面。</li>
-        <li>UNESCO 与公开古建介绍页：用于核对年代与基本对象信息。</li>
-        <li>故宫博物院英文站与公开介绍页面：用于辅助说明紫禁城的空间秩序与中轴逻辑。</li>
-      </ul>
-      <p>部署完成后，项目地址通常会是：<strong>https://aurevior-ai.github.io/gujianzhu-roadshow/</strong>。如果你启用了 GitHub Pages，这个链接就能直接访问。</p>
-    </div>
-  </footer>
+
   <script>
-    const fades=[...document.querySelectorAll('.fade')];
-    const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')})},{threshold:.14});
-    fades.forEach(el=>io.observe(el));
-    const bar=document.getElementById('bar');
-    addEventListener('scroll',()=>{
-      const h=document.documentElement;
-      const p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
-      bar.style.width=(p*100)+'%';
-    },{passive:true});
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const nav = document.getElementById('navDots');
+    const progressBar = document.getElementById('progressBar');
+    const slideCounter = document.getElementById('slideCounter');
+    const hudTitle = document.getElementById('hudTitle');
+
+    nav.innerHTML = slides.map((slide, index) => `<button data-index="${index}" data-label="${slide.dataset.label || (index+1)}" aria-label="${slide.dataset.label || (index+1)}"></button>`).join('');
+
+    function goToSlide(index){
+      const target = slides[index];
+      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    nav.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-index]');
+      if(!btn) return;
+      goToSlide(Number(btn.dataset.index));
+    });
+
+    document.addEventListener('keydown', (e) => {
+      const current = slides.findIndex(s => s.classList.contains('visible'));
+      const idx = current < 0 ? 0 : current;
+      if(['ArrowDown','PageDown',' '].includes(e.key)){
+        e.preventDefault();
+        goToSlide(Math.min(idx + 1, slides.length - 1));
+      }
+      if(['ArrowUp','PageUp'].includes(e.key)){
+        e.preventDefault();
+        goToSlide(Math.max(idx - 1, 0));
+      }
+      if(e.key === 'Home') goToSlide(0);
+      if(e.key === 'End') goToSlide(slides.length - 1);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          const idx = slides.indexOf(entry.target);
+          slides.forEach(s => s.classList.remove('visible'));
+          entry.target.classList.add('visible');
+          slideCounter.textContent = `${String(idx+1).padStart(2,'0')} / ${String(slides.length).padStart(2,'0')}`;
+          hudTitle.textContent = entry.target.dataset.label || '古建筑调研 · HTML 路演';
+          progressBar.style.width = `${((idx+1)/slides.length)*100}%`;
+          Array.from(nav.children).forEach((b,i) => b.classList.toggle('active', i===idx));
+          history.replaceState(null,'',`#${entry.target.id}`);
+        }
+      });
+    }, {threshold:.58});
+    slides.forEach(s => observer.observe(s));
+
+    const structureMap = {
+      tai: {
+        title:'台基：先把建筑从地面抬起来',
+        items:[
+          '它承担防潮、找平与仪式性抬升三重任务，是“看不见却先起作用”的基础层。',
+          '在调研中，台基需要结合排水、沉降、边角风化和游线冲击一起判断。',
+          '路演讲法：先从台基说起，观众会更容易理解为什么古建总是先“离地”。'
+        ]
+      },
+      zhu: {
+        title:'柱网：空间秩序真正开始显形',
+        items:[
+          '柱并不是孤立站立，而是与进深、开间、梁架一起定义空间节奏。',
+          '柱网的疏密与尺度，会直接影响观众对建筑“庄重”或“轻盈”的感受。',
+          '在调研表达中，柱网是连接平面、立面与结构判断的关键桥梁。'
+        ]
+      },
+      dou: {
+        title:'斗拱：结构传力与视觉表情的中介',
+        items:[
+          '它既承担挑檐与传力，又制造了檐下最迷人的阴影层次。',
+          '不同等级、不同年代的斗拱做法，会显著改变建筑的气质与尺度感。',
+          'HTML 的优势在这里很明显：可以把示意图、照片、术语解释放在同一页联动。'
+        ]
+      },
+      roof: {
+        title:'屋顶：木构最终被看见的轮廓',
+        items:[
+          '屋顶不是最后“盖上去”的形象，而是结构逻辑、排水逻辑与礼制逻辑的综合外观。',
+          '起翘、脊线、出檐与瓦面共同决定了建筑远观时最强的识别特征。',
+          '路演讲法：从屋顶收束，能把结构判断自然过渡到审美经验。'
+        ]
+      }
+    };
+
+    const structureTabs = document.getElementById('structureTabs');
+    const structurePanel = document.getElementById('structurePanel');
+    if(structureTabs){
+      structureTabs.addEventListener('click', (e) => {
+        const btn = e.target.closest('.tab-btn[data-tab]');
+        if(!btn) return;
+        const key = btn.dataset.tab;
+        Array.from(structureTabs.children).forEach(b => b.classList.toggle('active', b===btn));
+        const data = structureMap[key];
+        structurePanel.innerHTML = `<h3>${data.title}</h3><ul>${data.items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+      });
+    }
+
+    const methodTabs = document.getElementById('methodTabs');
+    if(methodTabs){
+      methodTabs.addEventListener('click', (e) => {
+        const btn = e.target.closest('.tab-btn[data-view]');
+        if(!btn) return;
+        const key = btn.dataset.view;
+        Array.from(methodTabs.children).forEach(b => b.classList.toggle('active', b===btn));
+        document.querySelectorAll('.switch-view').forEach(el => el.classList.toggle('active', el.id === `view-${key}`));
+      });
+    }
+
+    if(location.hash){
+      const target = document.querySelector(location.hash);
+      if(target){
+        setTimeout(() => target.scrollIntoView({behavior:'auto', block:'start'}), 120);
+      }
+    }
   </script>
 </body>
 </html>
